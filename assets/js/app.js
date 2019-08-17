@@ -10,7 +10,7 @@ var opts = {
   radius: 45, // The radius of the inner circle
   scale: 0.6, // Scales overall size of the spinner
   corners: 1, // Corner roundness (0..1)
-  color: '#fff', // CSS color or array of colors
+  color: '#ccc', // CSS color or array of colors
   fadeColor: 'transparent', // CSS color or array of colors
   speed: 1, // Rounds per second
   rotate: 0, // The rotation offset
@@ -27,10 +27,16 @@ var opts = {
 var target = document.getElementById('loading');
 var spinner = new Spinner(opts);
 
+var layers;
 var firstLandUseId;
+
+// Declare freeze layers for radio buttons
+// See fLayers.forEach() in map.onLoad() for menu creation
+var fLayers = [10, 20, 50, 80];
 
 // CARTO user, query parameters, query
 var user = 'data-inno';
+var fLayer = fLayers[0];
 var fDoy;
 var fDate;
 var sDoy;
@@ -54,7 +60,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaW5kaWdvYWctaXQiLCJhIjoiY2pydWxiMjRsMDl4MjQ0b
 var map = new mapboxgl.Map({
   container: 'map',
   hash: true,
-  style: 'mapbox://styles/mapbox/light-v10'
+  style: 'mapbox://styles/mapbox/light-v10',
+  customAttribution: '<a href="https://chadlawlis.com">Chad Lawlis</a>'
 });
 
 var usBounds = [[-131.497070, 22.093303], [-62.502929, 52.661410]];
@@ -107,26 +114,75 @@ map.on('load', function () {
     });
   });
 
-  var layers = map.getStyle().layers;
+  layers = map.getStyle().layers;
 
   // Find the index of the first landuse layer in the loaded map style
   for (let i = 0; i < layers.length; i++) {
     // If needed, can use regex to identify layer with id starting with "landuse" (https://stackoverflow.com/a/1315236)
     // layers[i].id.match(/landuse.*/)
-    if (layers[i].id === 'settlement-label') { // landuse
+    if (layers[i].id === 'settlement-label') {
       firstLandUseId = layers[i].id;
       break;
     }
+  }
+
+  var overlays = document.getElementById('overlays');
+  overlays.className = 'map-overlay bottom-left';
+
+  var layersMenu = document.createElement('div');
+  layersMenu.id = 'layers-menu';
+  layersMenu.className = 'layers-menu';
+  overlays.appendChild(layersMenu);
+
+  fLayers.forEach(function (l) { // Instantiate layersMenu with an input for each freeze layer
+    var layerDiv = document.createElement('div'); // Store each input in a div for vertical list display
+    layerDiv.id = 'freeze-' + l;
+    var layerInput = document.createElement('input');
+    layerInput.id = layerDiv.id + '-input';
+    layerInput.type = 'radio';
+    layerInput.name = 'rtoggle';
+    layerInput.value = l;
+    if (l === 10) { // Set 10% freeze to checked by default (given loaded on landing)
+      layerInput.checked = true;
+    }
+    layerDiv.appendChild(layerInput);
+
+    var layerLabel = document.createElement('label');
+    layerLabel.textContent = l + '% Freeze';
+    layerDiv.appendChild(layerLabel);
+
+    layersMenu.appendChild(layerDiv);
+  });
+
+  // Add map style switcher functionality
+  var inputs = layersMenu.getElementsByTagName('input');
+
+  function switchLayer (layer) {
+    fLayer = layer.target.value;
+
+    if (map.getLayer('counties')) {
+      map.removeLayer('counties');
+    }
+
+    if (map.getSource('counties')) {
+      map.removeSource('counties');
+    }
+
+    setAttributes();
+  }
+
+  for (let i = 0; i < inputs.length; i++) {
+    inputs[i].onclick = switchLayer;
   }
 
   setAttributes();
 });
 
 function setAttributes () {
-  fDoy = 'f_10_doy';
-  fDate = 'f_10_date';
-  sDoy = 's_10_doy';
-  sDate = 's_10_date';
+  fDoy = 'f_' + fLayer + '_doy';
+  fDate = 'f_' + fLayer + '_date';
+  sDoy = 's_' + fLayer + '_doy';
+  sDate = 's_' + fLayer + '_date';
 
   setQuery();
 }
@@ -148,6 +204,20 @@ function loadData () {
     dataType: 'json',
     success: function (response) {
       mapData(response);
+    },
+    error: function () {
+      spinner.stop();
+    },
+    statusCode: {
+      400: function () {
+        window.alert('Error (400): Bad request.');
+      },
+      404: function () {
+        window.alert('Error (404): The requested resource could not be found.');
+      },
+      500: function () {
+        window.alert('Error (500): Internal server error.');
+      }
     }
   });
 }
@@ -165,7 +235,7 @@ function mapData (data) {
     'paint': {
       'fill-color': [
         'step',
-        ['get', 'f_10_doy'],
+        ['get', fDoy],
         fillColors[0],
         breakpoints[0], fillColors[1],
         breakpoints[1], fillColors[2],
@@ -180,12 +250,15 @@ function mapData (data) {
     }
   }, firstLandUseId);
 
+  layers = map.getStyle().layers;
+  console.log(layers);
+
   // Add popup for each layer
   // Change cursor to pointer on parcel layer mouseover
   map.on('mousemove', 'counties', function (e) {
     map.getCanvas().style.cursor = 'pointer';
 
-    var popupContent = '';
+    var popupContent;
     var props = e.features[0].properties;
 
     if (props[sDate] !== 'null') {
