@@ -16,12 +16,27 @@ html, body, #map {
   margin: 0 0 40px 10px;
 }
 
+.date-form,
+.f-layers-toggle {
+  padding: 10px;
+}
+
 .date-picker-input {
   margin-bottom: 5px;
 }
 
-.date-picker-label, .layers-menu-label {
+.date-picker-label,
+.f-layers-toggle-label {
   margin-bottom: 5px;
+}
+
+.f-layers-toggle {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.f-layers-toggle label {
+  margin-left: 5px;
+  vertical-align: middle;
 }
 
 input[type="radio"] {
@@ -33,16 +48,32 @@ input[type="date"] {
   font: 16px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
-.layers-menu, .date-form {
-  padding: 10px;
+.layers-toggle {
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  font-size: .875rem;
+  position: absolute;
+  right: 10px;
+  top: 160px;
+}
+
+.layers-icon {
+  padding: 2px;
+}
+
+.layers-image {
+  height: 30px;
+  width: 30px;
 }
 
 .layers-menu {
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  display: none;
+  padding: 10px;
 }
 
 .layers-menu label {
-  margin-left: 5px;
+  padding-left: 5px;
   vertical-align: middle;
 }
 
