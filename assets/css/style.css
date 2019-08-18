@@ -32,6 +32,7 @@ html, body, #map {
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
+input[type="checkbox"],
 input[type="radio"] {
   vertical-align: middle;
 }
@@ -58,7 +59,6 @@ input[type="date"] {
 
 .layers-menu {
   display: none;
-  padding: 10px;
 }
 
 .map-overlay {
@@ -72,14 +72,12 @@ input[type="date"] {
   background: #333;
   color: #efefef;
   font: 1.4em -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  max-width: 200px;
-  min-width: 140px;
-  padding: 8px;
+  padding: 0;
   text-align: center;
 }
 
 .mapboxgl-popup-content p {
-  margin: 5px 0;
+  margin: 5px 0 0;
 }
 
 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
@@ -97,6 +95,18 @@ input[type="date"] {
 }
 .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
     border-left-color: #333;
+}
+
+.popup-menu {
+  padding: 10px;
+}
+
+.popup-menu:first-child {
+  border-bottom: 2px solid #efefef;
+}
+
+.popup-menu:last-child {
+  padding-top: 5px;
 }
 
 .toggle label {

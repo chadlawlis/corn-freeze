@@ -30,6 +30,7 @@ import { Spinner } from './spin.js';
 
   var mapLayers;
   var firstLandUseId;
+  var visibility = 'visible';
 
   // Declare freeze layer values for radio buttons
   var fLayers = ['10', '20', '50', '80'];
@@ -154,6 +155,34 @@ import { Spinner } from './spin.js';
     layersMenu.id = 'layers-menu';
     layersMenu.className = 'layers-menu';
 
+    var overlayLayersMenu = document.createElement('div');
+    overlayLayersMenu.id = 'overlay-layers-menu';
+    overlayLayersMenu.className = 'form-menu';
+
+    var overlayToggle = document.createElement('div');
+    overlayToggle.className = 'overlay-layer-checkbox toggle';
+    var overlayToggleInput = document.createElement('input');
+    overlayToggleInput.type = 'checkbox';
+    overlayToggleInput.id = 'overlay-layer-checkbox-input';
+    overlayToggleInput.checked = true;
+    var overlayToggleLabel = document.createElement('label');
+    overlayToggleLabel.textContent = 'Counties';
+    overlayToggle.appendChild(overlayToggleInput);
+    overlayToggle.appendChild(overlayToggleLabel);
+    overlayLayersMenu.appendChild(overlayToggle);
+
+    overlayToggleInput.addEventListener('change', function (e) {
+      map.setLayoutProperty('counties', 'visibility', e.target.checked ? 'visible' : 'none');
+      visibility = map.getLayoutProperty('counties', 'visibility');
+      // parcelVisibility
+    });
+
+    layersMenu.appendChild(overlayLayersMenu);
+
+    var baseLayersMenu = document.createElement('div');
+    baseLayersMenu.id = 'base-layers-menu';
+    baseLayersMenu.className = 'form-menu';
+
     baseLayers.forEach(function (l) { // Instantiate layersMenu with an input for each baseLayer declared at top of script
       var layerDiv = document.createElement('div'); // Store each input in a div for vertical list display
       layerDiv.id = l.label.toLowerCase() + '-input';
@@ -173,13 +202,14 @@ import { Spinner } from './spin.js';
       layerLabel.textContent = l.label;
       layerDiv.appendChild(layerLabel);
 
-      layersMenu.appendChild(layerDiv);
+      baseLayersMenu.appendChild(layerDiv);
     });
 
+    layersMenu.appendChild(baseLayersMenu);
     layersToggle.appendChild(layersMenu);
 
     // Add map style switcher functionality
-    var baseLayerInputs = layersMenu.getElementsByTagName('input');
+    var baseLayerInputs = baseLayersMenu.getElementsByTagName('input');
 
     function switchBaseLayer (layer) {
       var layerId = layer.target.id;
@@ -445,6 +475,9 @@ import { Spinner } from './spin.js';
       'id': 'counties',
       'type': 'fill',
       'source': 'counties',
+      'layout': {
+        'visibility': visibility
+      },
       'paint': {
         'fill-color': [
           'step',
@@ -471,16 +504,16 @@ import { Spinner } from './spin.js';
       var popupContent;
       var props = e.features[0].properties;
 
+      popupContent = '<div><div class="popup-menu popup"><p><b>' + props.name + '</b></p>' +
+      '<p style="margin: 0;">' + props.state_name + '</p></div>' +
+      '<div class="popup-menu"><p><b>Hard Freeze Date</b></p>' +
+      '<p style="margin: 0;"><small>(' + fLayer.substring(0, 1) + ' of past 10 years)</small></p><p>' + props[fDate] + '</p>' +
+      '<p><b>Latest Silking Date</b></p><p>';
+
       if (props[sDate] !== 'null') {
-        popupContent = '<p><b>' + props.name + '</b></p>' +
-        '<p>' + props.state_name + '</p><hr>' +
-        '<p><b>Freeze date:</b></p><p>' + props[fDate] + '</p>' +
-        '<p><b>Latest silking date:</b></p><p>' + props[sDate] + '</p>';
+        popupContent += props[sDate] + '</p></div></div>';
       } else {
-        popupContent = '<p><b>' + props.name + '</b></p>' +
-        '<p>' + props.state_name + '</p><hr>' +
-        '<p><b>Freeze date:</b></p><p>' + props[fDate] + '</p>' +
-        '<p><b>Latest silking date:</b></p><p>N/A</p>';
+        popupContent += 'N/A</p>';
       }
       popup.setLngLat(e.lngLat)
         .setHTML(popupContent)
