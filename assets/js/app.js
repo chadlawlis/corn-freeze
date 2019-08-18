@@ -27,21 +27,21 @@ var opts = {
 var target = document.getElementById('loading');
 var spinner = new Spinner(opts);
 
-var layers;
+var mapLayers;
 var firstLandUseId;
 
-// Declare freeze layers for radio buttons
-// See fLayers.forEach() in map.onLoad() for menu creation
-var fLayers = [10, 20, 50, 80];
+// Declare freeze layer values for radio buttons
+var fLayers = ['10', '20', '50', '80'];
 
-// CARTO user, query parameters, query
+// CARTO user, query attributes/values, query
 var user = 'data-inno';
-var fLayer = fLayers[0];
-var fDoy;
-var fDate;
-var sDoy;
-var sDate;
-var sql;
+var fLayer = fLayers[0]; // freeze layer; set to 10 freeze layer on page landing
+var fDoy; // freeze day of year attribute
+var fDate; // freeze date attribute
+var sDoy; // silk doy of year attribute
+var sDate; // silk date attribute
+var sDateFilter; // silk date attribute value for filter
+var sql; // sql query
 
 // value < breakpoint falls into each step, value >= last breakpoint creates final step:
 // value < 239
@@ -60,7 +60,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaW5kaWdvYWctaXQiLCJhIjoiY2pydWxiMjRsMDl4MjQ0b
 var map = new mapboxgl.Map({
   container: 'map',
   hash: true,
-  style: 'mapbox://styles/mapbox/light-v10',
+  style: 'mapbox://styles/mapbox/light-v10', // mapbox://styles/mapbox/satellite-streets-v11
   customAttribution: '<a href="https://chadlawlis.com">Chad Lawlis</a>'
 });
 
@@ -114,14 +114,14 @@ map.on('load', function () {
     });
   });
 
-  layers = map.getStyle().layers;
+  mapLayers = map.getStyle().layers;
 
   // Find the index of the first landuse layer in the loaded map style
-  for (let i = 0; i < layers.length; i++) {
+  for (let i = 0; i < mapLayers.length; i++) {
     // If needed, can use regex to identify layer with id starting with "landuse" (https://stackoverflow.com/a/1315236)
     // layers[i].id.match(/landuse.*/)
-    if (layers[i].id === 'settlement-label') {
-      firstLandUseId = layers[i].id;
+    if (mapLayers[i].id === 'settlement-label') {
+      firstLandUseId = mapLayers[i].id;
       break;
     }
   }
@@ -132,27 +132,40 @@ map.on('load', function () {
   var layersMenu = document.createElement('div');
   layersMenu.id = 'layers-menu';
   layersMenu.className = 'layers-menu';
-  overlays.appendChild(layersMenu);
 
-  fLayers.forEach(function (l) { // Instantiate layersMenu with an input for each freeze layer
-    var layerDiv = document.createElement('div'); // Store each input in a div for vertical list display
+  var layersMenuLabelDiv = document.createElement('div');
+  layersMenuLabelDiv.id = 'layers-menu-label';
+  layersMenuLabelDiv.className = 'layers-menu-label';
+
+  var layersMenuLabel = document.createElement('label');
+  layersMenuLabel.innerHTML = '<b>Earliest hard freeze date</b> <small>(28&#176;F) <i class="fas fa-question-circle"></i></small>';
+  layersMenuLabelDiv.appendChild(layersMenuLabel);
+  layersMenu.appendChild(layersMenuLabelDiv);
+
+  // Instantiate layersMenu with an input for each freeze layer
+  fLayers.forEach(function (l) {
+    // Store each input in a div for vertical list display
+    var layerDiv = document.createElement('div');
     layerDiv.id = 'freeze-' + l;
     var layerInput = document.createElement('input');
     layerInput.id = layerDiv.id + '-input';
     layerInput.type = 'radio';
     layerInput.name = 'rtoggle';
     layerInput.value = l;
-    if (l === 10) { // Set 10% freeze to checked by default (given loaded on landing)
+    // Set 10 freeze layer to checked by default (given loaded on landing)
+    if (l === '10') {
       layerInput.checked = true;
     }
     layerDiv.appendChild(layerInput);
 
     var layerLabel = document.createElement('label');
-    layerLabel.textContent = l + '% Freeze';
+    layerLabel.textContent = l.substring(0, 1) + ' of past 10 years';
     layerDiv.appendChild(layerLabel);
 
     layersMenu.appendChild(layerDiv);
   });
+
+  overlays.appendChild(layersMenu);
 
   // Add map style switcher functionality
   var inputs = layersMenu.getElementsByTagName('input');
@@ -163,17 +176,126 @@ map.on('load', function () {
     if (map.getLayer('counties')) {
       map.removeLayer('counties');
     }
-
     if (map.getSource('counties')) {
       map.removeSource('counties');
     }
-
     setAttributes();
   }
 
   for (let i = 0; i < inputs.length; i++) {
     inputs[i].onclick = switchLayer;
   }
+
+  var dateForm = document.createElement('form');
+  dateForm.id = 'date-form';
+  dateForm.className = 'date-form';
+
+  var datePickerLabelDiv = document.createElement('div');
+  datePickerLabelDiv.id = 'date-picker-label';
+  datePickerLabelDiv.className = 'date-picker-label';
+
+  var datePickerLabel = document.createElement('label');
+  datePickerLabel.innerHTML = '<b style="vertical-align: middle;">Latest silking date</b> <small style="vertical-align: middle;">(on/before) <i class="fas fa-question-circle"></i></small>';
+  datePickerLabelDiv.appendChild(datePickerLabel);
+
+  var datePickerInputDiv = document.createElement('div');
+  datePickerInputDiv.id = 'date-picker-input';
+  datePickerInputDiv.className = 'date-picker-input';
+
+  var datePickerInput = document.createElement('input');
+  datePickerInput.id = 'date-input';
+  datePickerInput.type = 'date';
+  datePickerInput.name = 'silk-date';
+  datePickerInput.value = '';
+  datePickerInput.min = '2019-06-01';
+  datePickerInput.max = '2019-10-31';
+
+  datePickerInput.addEventListener('change', function () {
+    if (datePickerInput.value.length === 10) {
+      datePickerButton.disabled = false;
+      datePickerResetButton.disabled = false;
+    } else {
+      if (sDateFilter && sql.indexOf(sDateFilter) > -1) {
+        if (map.getLayer('counties')) {
+          map.removeLayer('counties');
+        }
+        if (map.getSource('counties')) {
+          map.removeSource('counties');
+        }
+
+        sDateFilter = '';
+        setQuery();
+      }
+      datePickerButton.disabled = true;
+      datePickerResetButton.disabled = true;
+    }
+  });
+
+  datePickerInputDiv.appendChild(datePickerInput);
+
+  var datePickerButtonDiv = document.createElement('div');
+  datePickerButtonDiv.id = 'date-picker-button';
+  datePickerButtonDiv.className = 'date-picker-button';
+
+  var datePickerButton = document.createElement('button');
+  datePickerButton.id = 'date-button';
+  datePickerButton.className = 'date-button';
+  datePickerButton.type = 'button';
+  datePickerButton.disabled = true;
+  datePickerButton.textContent = 'Submit';
+
+  datePickerButton.addEventListener('click', function () {
+    if (datePickerInput.value.length === 10) {
+      sDateFilter = '\'' + datePickerInput.value + '\'';
+
+      if (map.getLayer('counties')) {
+        map.removeLayer('counties');
+      }
+      if (map.getSource('counties')) {
+        map.removeSource('counties');
+      }
+
+      setQuery();
+    }
+  });
+
+  var datePickerResetButton = document.createElement('button');
+  datePickerResetButton.id = 'date-reset-button';
+  datePickerResetButton.className = 'date-reset-button';
+  datePickerResetButton.type = 'button';
+  datePickerResetButton.disabled = true;
+  datePickerResetButton.textContent = 'Reset';
+
+  datePickerResetButton.addEventListener('click', function () {
+    if (datePickerInput.value.length === 10) {
+      if (sDateFilter && sql.indexOf(sDateFilter) > -1) {
+        datePickerInput.value = '';
+        sDateFilter = '';
+
+        if (map.getLayer('counties')) {
+          map.removeLayer('counties');
+        }
+        if (map.getSource('counties')) {
+          map.removeSource('counties');
+        }
+
+        setQuery();
+      } else {
+        datePickerInput.value = '';
+        sDateFilter = '';
+      }
+      datePickerResetButton.disabled = true;
+      datePickerButton.disabled = true;
+    }
+  });
+
+  datePickerButtonDiv.appendChild(datePickerButton);
+  datePickerButtonDiv.appendChild(datePickerResetButton);
+
+  dateForm.appendChild(datePickerLabelDiv);
+  dateForm.appendChild(datePickerInputDiv);
+  dateForm.appendChild(datePickerButtonDiv);
+  overlays.appendChild(dateForm);
 
   setAttributes();
 });
@@ -188,7 +310,11 @@ function setAttributes () {
 }
 
 function setQuery () {
-  sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48 where ' + fDoy + ' is not null';
+  if (sDateFilter) {
+    sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48 where ' + fDoy + ' is not null and ' + sDate + ' <= ' + sDateFilter;
+  } else {
+    sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48 where ' + fDoy + ' is not null';
+  }
 
   loadData();
 }
@@ -249,9 +375,6 @@ function mapData (data) {
       'fill-outline-color': '#fff'
     }
   }, firstLandUseId);
-
-  layers = map.getStyle().layers;
-  console.log(layers);
 
   // Add popup for each layer
   // Change cursor to pointer on parcel layer mouseover

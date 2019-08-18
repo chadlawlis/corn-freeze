@@ -1,4 +1,5 @@
 body {
+  color: #333;
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
@@ -15,8 +16,34 @@ html, body, #map {
   margin: 0 0 40px 10px;
 }
 
+.date-picker-input {
+  margin-bottom: 5px;
+}
+
+.date-picker-label, .layers-menu-label {
+  margin-bottom: 5px;
+}
+
+input[type="radio"] {
+  vertical-align: middle;
+}
+
+input[type="date"] {
+  color: #333;
+  font: 16px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.layers-menu, .date-form {
+  padding: 10px;
+}
+
+.layers-menu {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
 .layers-menu label {
   margin-left: 5px;
+  vertical-align: middle;
 }
 
 .map-overlay {
@@ -24,7 +51,6 @@ html, body, #map {
   border-radius: 4px;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
   overflow: auto;
-  padding: 10px;
   position: absolute;
 }
 
@@ -34,7 +60,7 @@ html, body, #map {
   font: 1.4em -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
   max-width: 200px;
   min-width: 140px;
-  padding: 10px;
+  padding: 8px;
   text-align: center;
 }
 
