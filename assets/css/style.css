@@ -16,10 +16,7 @@ html, body, #map {
   margin: 0 0 40px 10px;
 }
 
-.date-picker-input {
-  margin-bottom: 5px;
-}
-
+.date-picker-input,
 .form-label {
   margin-bottom: 5px;
 }
@@ -59,6 +56,30 @@ input[type="date"] {
 
 .layers-menu {
   display: none;
+}
+
+.legend-block {
+  line-height: 16px;
+  margin-bottom: 10px;
+}
+
+.legend-block i {
+  float: left;
+  height: 16px;
+  width: 16px;
+  margin-right: 5px;
+}
+
+.legend-gradient {
+  background: linear-gradient(90deg, #5c53a5, #a059a0, #ce6693, #eb7f86, #f8a07e, #fac484, #f3e79b);
+  border-radius: 6px;
+  height: 10px;
+  margin: 5px 0 10px;
+  width: 100%;
+}
+
+.legend-gradient-label {
+  margin-top: 10px;
 }
 
 .map-overlay {
@@ -107,6 +128,10 @@ input[type="date"] {
 
 .popup-menu:last-child {
   padding-top: 5px;
+}
+
+.small {
+  font-size: small;
 }
 
 .toggle label {

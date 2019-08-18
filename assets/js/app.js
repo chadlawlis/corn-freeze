@@ -243,9 +243,26 @@ import { Spinner } from './spin.js';
     fLayersToggleLabelDiv.className = 'form-label';
 
     var fLayersToggleLabel = document.createElement('label');
-    fLayersToggleLabel.innerHTML = '<b>Earliest hard freeze</b> <small>(28&#176;F) <i class="fas fa-question-circle"></i></small>';
+    fLayersToggleLabel.innerHTML = '<b>Earliest hard freeze</b> <span class="small">(28&#176;F) <i class="fas fa-question-circle"></i></span>';
     fLayersToggleLabelDiv.appendChild(fLayersToggleLabel);
     fLayersToggle.appendChild(fLayersToggleLabelDiv);
+
+    var gradientLabel = document.createElement('div');
+    gradientLabel.id = 'legend-gradient-label';
+    gradientLabel.className = 'legend-gradient-label small';
+    gradientLabel.innerHTML = 'June 1<span style="float: right;">November 30</span>';
+    fLayersToggle.appendChild(gradientLabel);
+
+    var gradient = document.createElement('div');
+    gradient.id = 'legend-gradient';
+    gradient.className = 'legend-gradient';
+    fLayersToggle.appendChild(gradient);
+
+    var legendBlock = document.createElement('div');
+    legendBlock.id = 'legend-block';
+    legendBlock.className = 'legend-block small';
+    legendBlock.innerHTML = '<i style="background: #dfdfdf"></i>on/after December 1';
+    fLayersToggle.appendChild(legendBlock);
 
     // Instantiate fLayersToggle with an input for each freeze layer
     fLayers.forEach(function (l) {
@@ -294,7 +311,7 @@ import { Spinner } from './spin.js';
     datePickerLabelDiv.className = 'form-label';
 
     var datePickerLabel = document.createElement('label');
-    datePickerLabel.innerHTML = '<b style="vertical-align: middle;">Latest silking date</b> <small style="vertical-align: middle;">(on/before) <i class="fas fa-question-circle"></i></small>';
+    datePickerLabel.innerHTML = '<b style="vertical-align: middle;">Latest silking date</b> <span class="small" style="vertical-align: middle;">(on/before) <i class="fas fa-question-circle"></i></span>';
     datePickerLabelDiv.appendChild(datePickerLabel);
 
     var datePickerInputDiv = document.createElement('div');
@@ -507,7 +524,7 @@ import { Spinner } from './spin.js';
       popupContent = '<div><div class="popup-menu popup"><p><b>' + props.name + '</b></p>' +
       '<p style="margin: 0;">' + props.state_name + '</p></div>' +
       '<div class="popup-menu"><p><b>Hard Freeze Date</b></p>' +
-      '<p style="margin: 0;"><small>(' + fLayer.substring(0, 1) + ' of past 10 years)</small></p><p>' + props[fDate] + '</p>' +
+      '<p style="margin: 0;"><span class="small">(' + fLayer.substring(0, 1) + ' of past 10 years)</span></p><p>' + props[fDate] + '</p>' +
       '<p><b>Latest Silking Date</b></p><p>';
 
       if (props[sDate] !== 'null') {
