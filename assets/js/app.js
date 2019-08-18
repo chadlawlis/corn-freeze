@@ -136,7 +136,7 @@ import { Spinner } from './spin.js';
 
     // Create map style switcher structure
     var layersToggle = document.getElementById('layers-toggle'); // Create "layers-toggle" parent div
-    layersToggle.className = 'layers-toggle';
+    layersToggle.className = 'layers-toggle map-overlay';
 
     var layersImage = document.createElement('div'); // Create "layers-image" div with Leaflet layers icon; default display
     layersImage.id = 'layers-image';
@@ -157,6 +157,7 @@ import { Spinner } from './spin.js';
     baseLayers.forEach(function (l) { // Instantiate layersMenu with an input for each baseLayer declared at top of script
       var layerDiv = document.createElement('div'); // Store each input in a div for vertical list display
       layerDiv.id = l.label.toLowerCase() + '-input';
+      layerDiv.className = 'toggle';
       var layerInput = document.createElement('input');
       layerInput.id = l.id;
       layerInput.type = 'radio';
@@ -187,7 +188,6 @@ import { Spinner } from './spin.js';
     }
 
     for (let i = 0; i < baseLayerInputs.length; i++) {
-      console.log(baseLayerInputs[i]);
       baseLayerInputs[i].onclick = switchBaseLayer;
     }
 
@@ -206,11 +206,11 @@ import { Spinner } from './spin.js';
 
     var fLayersToggle = document.createElement('div');
     fLayersToggle.id = 'f-layers-toggle';
-    fLayersToggle.className = 'f-layers-toggle';
+    fLayersToggle.className = 'form-menu';
 
     var fLayersToggleLabelDiv = document.createElement('div');
     fLayersToggleLabelDiv.id = 'f-layers-toggle-label';
-    fLayersToggleLabelDiv.className = 'f-layers-toggle-label';
+    fLayersToggleLabelDiv.className = 'form-label';
 
     var fLayersToggleLabel = document.createElement('label');
     fLayersToggleLabel.innerHTML = '<b>Earliest hard freeze</b> <small>(28&#176;F) <i class="fas fa-question-circle"></i></small>';
@@ -222,6 +222,7 @@ import { Spinner } from './spin.js';
       // Store each input in a div for vertical list display
       var layerDiv = document.createElement('div');
       layerDiv.id = 'f-layer-' + l;
+      layerDiv.className = 'toggle';
       var layerInput = document.createElement('input');
       layerInput.id = layerDiv.id + '-input';
       layerInput.type = 'radio';
@@ -256,11 +257,11 @@ import { Spinner } from './spin.js';
 
     var dateForm = document.createElement('form');
     dateForm.id = 'date-form';
-    dateForm.className = 'date-form';
+    dateForm.className = 'form-menu';
 
     var datePickerLabelDiv = document.createElement('div');
     datePickerLabelDiv.id = 'date-picker-label';
-    datePickerLabelDiv.className = 'date-picker-label';
+    datePickerLabelDiv.className = 'form-label';
 
     var datePickerLabel = document.createElement('label');
     datePickerLabel.innerHTML = '<b style="vertical-align: middle;">Latest silking date</b> <small style="vertical-align: middle;">(on/before) <i class="fas fa-question-circle"></i></small>';

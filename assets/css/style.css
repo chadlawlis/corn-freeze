@@ -16,27 +16,20 @@ html, body, #map {
   margin: 0 0 40px 10px;
 }
 
-.date-form,
-.f-layers-toggle {
-  padding: 10px;
-}
-
 .date-picker-input {
   margin-bottom: 5px;
 }
 
-.date-picker-label,
-.f-layers-toggle-label {
+.form-label {
   margin-bottom: 5px;
 }
 
-.f-layers-toggle {
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+.form-menu {
+  padding: 10px;
 }
 
-.f-layers-toggle label {
-  margin-left: 5px;
-  vertical-align: middle;
+.form-menu:first-child {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 input[type="radio"] {
@@ -49,11 +42,7 @@ input[type="date"] {
 }
 
 .layers-toggle {
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
   font-size: .875rem;
-  position: absolute;
   right: 10px;
   top: 160px;
 }
@@ -72,16 +61,10 @@ input[type="date"] {
   padding: 10px;
 }
 
-.layers-menu label {
-  padding-left: 5px;
-  vertical-align: middle;
-}
-
 .map-overlay {
   background: #fff;
   border-radius: 4px;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-  overflow: auto;
   position: absolute;
 }
 
@@ -114,4 +97,9 @@ input[type="date"] {
 }
 .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
     border-left-color: #333;
+}
+
+.toggle label {
+  margin-left: 5px;
+  vertical-align: middle;
 }
