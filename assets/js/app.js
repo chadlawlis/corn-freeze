@@ -48,7 +48,11 @@ import { Spinner } from './spin.js';
   var data;
 
   // value < breakpoint falls into each step, value >= last breakpoint creates final step:
-  // value < 239
+  // first breakpoints value (1) and fillColors value (#f1f1f0) included for counties with NULL freeze dates
+  // null values converted to 0 via 'to-number' expression ['to-number', ['get', fDoy]] in 'fill-color' property of addLayer
+  // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-types-to-number
+  // value < 1
+  // 1 <= value < 239
   // 239 <= value < 271
   // 271 <= value < 286
   // 286 <= value < 298
@@ -56,8 +60,8 @@ import { Spinner } from './spin.js';
   // 308 <= value < 321
   // 335 <= value < 335
   // 335 <= value
-  var breakpoints = [239, 271, 286, 298, 308, 321, 335];
-  var fillColors = ['#5c53a5', '#a059a0', '#ce6693', '#eb7f86', '#f8a07e', '#fac484', '#f3e79b', '#dfdfdf'];
+  var breakpoints = [1, 239, 271, 286, 298, 308, 321, 335];
+  var fillColors = ['#f1f1f0', '#5c53a5', '#a059a0', '#ce6693', '#eb7f86', '#f8a07e', '#fac484', '#f3e79b', '#dfdfdf'];
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiY2hhZGxhd2xpcyIsImEiOiJlaERjUmxzIn0.P6X84vnEfttg0TZ7RihW1g';
 
@@ -176,8 +180,8 @@ import { Spinner } from './spin.js';
 
     overlayToggleInput.addEventListener('change', function (e) {
       map.setLayoutProperty('counties', 'visibility', e.target.checked ? 'visible' : 'none');
+      map.setLayoutProperty('counties-line', 'visibility', e.target.checked ? 'visible' : 'none');
       visibility = map.getLayoutProperty('counties', 'visibility');
-      // parcelVisibility
     });
 
     layersMenu.appendChild(overlayLayersMenu);
@@ -338,6 +342,9 @@ import { Spinner } from './spin.js';
           if (map.getLayer('counties')) {
             map.removeLayer('counties');
           }
+          if (map.getLayer('counties-line')) {
+            map.removeLayer('counties-line');
+          }
           if (map.getSource('counties')) {
             map.removeSource('counties');
           }
@@ -370,6 +377,9 @@ import { Spinner } from './spin.js';
         if (map.getLayer('counties')) {
           map.removeLayer('counties');
         }
+        if (map.getLayer('counties-line')) {
+          map.removeLayer('counties-line');
+        }
         if (map.getSource('counties')) {
           map.removeSource('counties');
         }
@@ -393,6 +403,9 @@ import { Spinner } from './spin.js';
 
           if (map.getLayer('counties')) {
             map.removeLayer('counties');
+          }
+          if (map.getLayer('counties-line')) {
+            map.removeLayer('counties-line');
           }
           if (map.getSource('counties')) {
             map.removeSource('counties');
@@ -430,9 +443,11 @@ import { Spinner } from './spin.js';
 
   function setQuery () {
     if (sDateFilter) {
-      sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48 where ' + fDoy + ' is not null and ' + sDate + ' <= ' + sDateFilter;
+      // sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48 where ' + fDoy + ' is not null and ' + sDate + ' <= ' + sDateFilter;
+      sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48 where ' + sDate + ' <= ' + sDateFilter;
     } else {
-      sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48 where ' + fDoy + ' is not null';
+      // sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48 where ' + fDoy + ' is not null';
+      sql = 'select geoid, name || \' County\' as name, state_name, ' + fDoy + ', ' + fDate + ', ' + sDoy + ', ' + sDate + ', the_geom from counties_48';
     }
 
     loadData();
@@ -472,6 +487,9 @@ import { Spinner } from './spin.js';
     if (map.getLayer('counties')) {
       map.removeLayer('counties');
     }
+    if (map.getLayer('counties-line')) {
+      map.removeLayer('counties-line');
+    }
     if (map.getSource('counties')) {
       map.removeSource('counties');
     }
@@ -501,7 +519,7 @@ import { Spinner } from './spin.js';
       'paint': {
         'fill-color': [
           'step',
-          ['get', fDoy],
+          ['to-number', ['get', fDoy]],
           fillColors[0],
           breakpoints[0], fillColors[1],
           breakpoints[1], fillColors[2],
@@ -509,10 +527,32 @@ import { Spinner } from './spin.js';
           breakpoints[3], fillColors[4],
           breakpoints[4], fillColors[5],
           breakpoints[5], fillColors[6],
-          breakpoints[6], fillColors[7]
+          breakpoints[6], fillColors[7],
+          breakpoints[7], fillColors[8]
         ],
-        'fill-opacity': 1,
-        'fill-outline-color': '#fff'
+        'fill-opacity': 1
+      }
+    }, firstLandUseId);
+
+    map.addLayer({
+      'id': 'counties-line',
+      'type': 'line',
+      'source': 'counties',
+      'layout': {
+        'visibility': visibility
+      },
+      'paint': {
+        'line-color': '#fff',
+        'line-width': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          // when zoom <= 4, line-width: 0.5
+          4, 0.5,
+          // when zoom >= 9, line-width: 1.2
+          9, 1.2
+          // in between, line-width will be linearly interpolated between 0.5 and 1.2 pixels
+        ]
       }
     }, firstLandUseId);
 
@@ -528,15 +568,22 @@ import { Spinner } from './spin.js';
       '<p style="margin-top: 2px">' + props.state_name + '</p></div>' +
       '<hr>' +
       '<div class="popup-menu"><p><b>Hard Freeze Date</b></p>' +
-      '<p class="small" style="margin-top: 2px">' + fLayer.substring(0, 1) + ' of past 10 years</p><p>' +
-      props[fDate] + '</p>' +
-      '<p><b>Latest Silking Date</b></p><p>';
+      '<p class="small" style="margin-top: 2px">' + fLayer.substring(0, 1) + ' of past 10 years</p><p>';
+
+      if (props[fDate] !== 'null') {
+        popupContent += props[fDate] + '</p>';
+      } else {
+        popupContent += 'N/A</p>';
+      }
+
+      popupContent += '<p><b>Latest Silking Date</b></p><p>';
 
       if (props[sDate] !== 'null') {
         popupContent += props[sDate] + '</p></div></div>';
       } else {
         popupContent += 'N/A</p></div></div>';
       }
+
       popup.setLngLat(e.lngLat)
         .setHTML(popupContent)
         .addTo(map);
