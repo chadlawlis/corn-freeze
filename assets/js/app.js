@@ -238,8 +238,36 @@ import { Spinner } from './spin.js';
       layersMenu.style.display = 'none'; // ... hiding layer switcher menu
     });
 
-    var overlays = document.getElementById('form');
-    overlays.className = 'map-overlay bottom-left';
+    // Create lightbox for "about" modal
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/:target
+    var lightbox = document.getElementById('lightbox');
+    var infoLightBox = document.createElement('div');
+    infoLightBox.id = 'about';
+    infoLightBox.className = 'lightbox';
+    var infoLightBoxFigure = document.createElement('figure');
+    var infoLightBoxFigureAnchor = document.createElement('a');
+    infoLightBoxFigureAnchor.setAttribute('href', '#');
+    infoLightBoxFigureAnchor.className = 'close';
+    var infoLightBoxFigureCaption = document.createElement('figcaption');
+    infoLightBoxFigureCaption.innerHTML = '<h1>About</h1>' +
+    '<p>The late start to this year\'s corn growing season, delayed from early-season flooding and cool temperatures across the Midwest, means growers are at risk of losing significant portions of their harvest in the event of an early freeze.</p>' +
+    '<p>This map provides a national picture of the earliest freeze dates by county over the past ten years (2009-2018), and the date by which corn must "silk" in order to reach maturation ahead of the freeze.</p>' +
+    '<p>Created by <a href="https://chadlawlis.com" target="_blank">Chad Lawlis</a>.</p>' +
+    '<h1>Data</h1>' +
+    '<p><b>Earliest hard freeze</b> is the earliest date at which the minimum surface temperature (county-wide) reached 28&#176;F during the growing season. An early hard freeze can disrupt crop growth and prevent it from reaching maturity.</p>' +
+    '<p>Four freeze layers are included, each representing a ranking of earliest hard freeze date per county: "1 of past 10 years" being the earliest hard freeze date during the growing season in the past ten years, "2 of past 10 years" being the second earliest, etc.</p>' +
+    '<p>The absence of a hard freeze date value in the "1 of past 10 years" layer indicates no observed hard freeze in that county during the growing season over the past ten years. The absence of a hard freeze date value in the "2/5/8 of past 10 years" layers indicates either no observed hard freeze in that county during the growing season over the past ten years <i>or</i> not enough instances of hard freeze to represent the ranking. For example, a county whose minimum surface temperature reached 28&#176;F four times over the past ten growing seasons will not have a hard freeze date value in the "5 of past 10 years" layer.' +
+    '<p><b>Latest silking date</b> is the latest date by which corn must "silk" in order to reach maturity, or "black layer," by the hard freeze date. The latest silking date is calculated using daily average "growing degree day" units ("GDD" or "GDU") from the past ten years, working back from a given hard freeze date.</p>' +
+    '<p>GDU is calculated by taking the average of the minimum and maximum surface temperature on a given day and subtracting a crop-specific baseline temperature (50&#176;F for corn). Given a maximum temperature of 86&#176;F and minimum temperature of 70&#176;F on a given day, the calculation for GDU is: ((86+70)/2)-50 = 28.</p>' +
+    '<p>Corn typically requires ~1300 GDU to transition from silking to maturity (and ~1400 from planting to silking, for a total of ~2700 GDU from planting to maturity). More information on GDU is available from Midwestern Regional Climate Center\'s <a href="https://mrcc.illinois.edu/U2U/gdd/aboutgdd.html">Usable to Useful</a> site.</p>';
+
+    infoLightBoxFigure.appendChild(infoLightBoxFigureAnchor);
+    infoLightBoxFigure.appendChild(infoLightBoxFigureCaption);
+    infoLightBox.appendChild(infoLightBoxFigure);
+    lightbox.appendChild(infoLightBox);
+
+    var form = document.getElementById('form');
+    form.className = 'map-overlay bottom-left';
 
     var title = document.createElement('div');
     title.id = 'title';
@@ -247,8 +275,8 @@ import { Spinner } from './spin.js';
     title.innerHTML = '<h1>Freeze & Corn Growth</h1>' +
     '<p>How early does corn in your county</p>' +
     '<p>need to silk to reach maturity</p>' +
-    '<p>before an early freeze?&nbsp;<a href="#about"><i class="fas fa-question-circle small"></i></a></p>'; // "&nbsp;" = non-breaking space
-    overlays.appendChild(title);
+    '<p>before an early freeze?&nbsp;<a href="#about"><i class="fas fa-question-circle small" title="About"></i></a></p>'; // "&nbsp;" = non-breaking space
+    form.appendChild(title);
 
     var fLayersToggle = document.createElement('div');
     fLayersToggle.id = 'f-layers-toggle';
@@ -260,7 +288,6 @@ import { Spinner } from './spin.js';
 
     var fLayersToggleLabel = document.createElement('label');
     fLayersToggleLabel.innerHTML = '<b>Earliest hard freeze</b> <span class="small">(28&#176;F)</span>'; // &#176; = HTML degree sign
-    // '&nbsp;<i class="fas fa-question-circle"></i></span>'; // HTML non-breaking space
     fLayersToggleLabelDiv.appendChild(fLayersToggleLabel);
     fLayersToggle.appendChild(fLayersToggleLabelDiv);
 
@@ -305,7 +332,7 @@ import { Spinner } from './spin.js';
       fLayersToggle.appendChild(layerDiv);
     });
 
-    overlays.appendChild(fLayersToggle);
+    form.appendChild(fLayersToggle);
 
     // Add map style switcher functionality
     var fLayerInputs = fLayersToggle.getElementsByTagName('input');
@@ -438,7 +465,7 @@ import { Spinner } from './spin.js';
     dateForm.appendChild(datePickerLabelDiv);
     dateForm.appendChild(datePickerInputDiv);
     dateForm.appendChild(datePickerButtonDiv);
-    overlays.appendChild(dateForm);
+    form.appendChild(dateForm);
 
     setAttributes();
   });
@@ -559,7 +586,7 @@ import { Spinner } from './spin.js';
           ['linear'],
           ['zoom'],
           // when zoom <= 4, line-width: 0.5
-          4, 0.5,
+          4, 0.25,
           // when zoom >= 9, line-width: 1.2
           9, 1.2
           // in between, line-width will be linearly interpolated between 0.5 and 1.2 pixels
