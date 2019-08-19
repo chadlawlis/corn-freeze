@@ -29,16 +29,26 @@ html, body, #map {
   margin-bottom: 8px;
 }
 
-.form-menu {
+.form-menu,
+.layers-form-menu {
   padding: 8px;
 }
 
-.form-menu:first-child {
+.form-menu {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.form-menu:first-child {
+  border-top: 0;
 }
 
 .form-menu:last-child {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 0;
+}
+
+.form-menu a {
+  color: #333;
 }
 
 input[type="checkbox"],
@@ -49,6 +59,14 @@ input[type="radio"] {
 input[type="date"] {
   color: #333;
   font: 14px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.layers-form-menu:first-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.layers-form-menu:last-child {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .layers-toggle {
@@ -141,7 +159,20 @@ input[type="date"] {
   font-size: 12px;
 }
 
+.title h1 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+
+.title p {
+  margin: 2px 0;
+}
+
 .toggle label {
   margin-left: 5px;
+  vertical-align: middle;
+}
+
+.v-middle {
   vertical-align: middle;
 }

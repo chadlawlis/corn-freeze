@@ -164,7 +164,7 @@ import { Spinner } from './spin.js';
 
     var overlayLayersMenu = document.createElement('div');
     overlayLayersMenu.id = 'overlay-layers-menu';
-    overlayLayersMenu.className = 'form-menu';
+    overlayLayersMenu.className = 'layers-form-menu';
 
     var overlayToggle = document.createElement('div');
     overlayToggle.className = 'overlay-layer-checkbox toggle';
@@ -188,7 +188,7 @@ import { Spinner } from './spin.js';
 
     var baseLayersMenu = document.createElement('div');
     baseLayersMenu.id = 'base-layers-menu';
-    baseLayersMenu.className = 'form-menu';
+    baseLayersMenu.className = 'layers-form-menu';
 
     baseLayers.forEach(function (l) { // Instantiate layersMenu with an input for each baseLayer declared at top of script
       var layerDiv = document.createElement('div'); // Store each input in a div for vertical list display
@@ -241,6 +241,15 @@ import { Spinner } from './spin.js';
     var overlays = document.getElementById('form');
     overlays.className = 'map-overlay bottom-left';
 
+    var title = document.createElement('div');
+    title.id = 'title';
+    title.className = 'form-menu title';
+    title.innerHTML = '<h1>Freeze & Corn Growth</h1>' +
+    '<p>How early does corn in your county</p>' +
+    '<p>need to silk to reach maturity</p>' +
+    '<p>before an early freeze?&nbsp;<a href="#about"><i class="fas fa-question-circle small"></i></a></p>'; // "&nbsp;" = non-breaking space
+    overlays.appendChild(title);
+
     var fLayersToggle = document.createElement('div');
     fLayersToggle.id = 'f-layers-toggle';
     fLayersToggle.className = 'form-menu';
@@ -250,7 +259,8 @@ import { Spinner } from './spin.js';
     fLayersToggleLabelDiv.className = 'form-label';
 
     var fLayersToggleLabel = document.createElement('label');
-    fLayersToggleLabel.innerHTML = '<b>Earliest hard freeze</b> <span class="small">(28&#176;F) <i class="fas fa-question-circle"></i></span>';
+    fLayersToggleLabel.innerHTML = '<b>Earliest hard freeze</b> <span class="small">(28&#176;F)</span>'; // &#176; = HTML degree sign
+    // '&nbsp;<i class="fas fa-question-circle"></i></span>'; // HTML non-breaking space
     fLayersToggleLabelDiv.appendChild(fLayersToggleLabel);
     fLayersToggle.appendChild(fLayersToggleLabelDiv);
 
@@ -318,7 +328,8 @@ import { Spinner } from './spin.js';
     datePickerLabelDiv.className = 'form-label';
 
     var datePickerLabel = document.createElement('label');
-    datePickerLabel.innerHTML = '<b style="vertical-align: middle;">Latest silking date</b> <span class="small" style="vertical-align: middle;">(on/before) <i class="fas fa-question-circle"></i></span>';
+    datePickerLabel.innerHTML = '<b class="v-middle">Latest silking date</b>&nbsp;' +
+    '<span class="small v-middle">(on/before)</span>';
     datePickerLabelDiv.appendChild(datePickerLabel);
 
     var datePickerInputDiv = document.createElement('div');
