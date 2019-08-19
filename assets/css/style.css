@@ -26,7 +26,7 @@ html, body, #map {
 
 .date-picker-input,
 .form-label {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .form-menu,
@@ -161,11 +161,11 @@ input[type="date"] {
 
 .title h1 {
   font-size: 16px;
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 .title p {
-  margin: 2px 0;
+  margin: 0;
 }
 
 .toggle label {

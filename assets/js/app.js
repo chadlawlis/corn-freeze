@@ -75,7 +75,7 @@ import { Spinner } from './spin.js';
   // [[sw],[ne]]
   // var usBounds = [[-131.5, 22.1], [-62.5, 52.6]];
   // moved the view slightly west (i.e., moved US slightly east on the map) to accommodate form-menu on 13" laptop
-  var usBounds = [[-134, 22.1], [-65, 52.6]];
+  var usBounds = [[-135.5, 22.1], [-66.5, 52.6]];
   map.fitBounds(usBounds);
 
   // Declare baseLayers for map style switcher
