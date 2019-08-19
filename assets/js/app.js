@@ -377,7 +377,7 @@ import { Spinner } from './spin.js';
 
     var datePickerResetButton = document.createElement('button');
     datePickerResetButton.id = 'date-reset-button';
-    datePickerResetButton.className = 'date-reset-button';
+    datePickerResetButton.className = 'date-button reset';
     datePickerResetButton.type = 'button';
     datePickerResetButton.disabled = true;
     datePickerResetButton.textContent = 'Reset';
@@ -521,16 +521,18 @@ import { Spinner } from './spin.js';
       var popupContent;
       var props = e.features[0].properties;
 
-      popupContent = '<div><div class="popup-menu popup"><p><b>' + props.name + '</b></p>' +
-      '<p style="margin: 0;">' + props.state_name + '</p></div>' +
+      popupContent = '<div><div class="popup-menu"><p><b>' + props.name + '</b></p>' +
+      '<p style="margin-top: 2px">' + props.state_name + '</p></div>' +
+      '<hr>' +
       '<div class="popup-menu"><p><b>Hard Freeze Date</b></p>' +
-      '<p style="margin: 0;"><span class="small">(' + fLayer.substring(0, 1) + ' of past 10 years)</span></p><p>' + props[fDate] + '</p>' +
+      '<p class="small" style="margin-top: 2px">' + fLayer.substring(0, 1) + ' of past 10 years</p><p>' +
+      props[fDate] + '</p>' +
       '<p><b>Latest Silking Date</b></p><p>';
 
       if (props[sDate] !== 'null') {
         popupContent += props[sDate] + '</p></div></div>';
       } else {
-        popupContent += 'N/A</p>';
+        popupContent += 'N/A</p></div></div>';
       }
       popup.setLngLat(e.lngLat)
         .setHTML(popupContent)

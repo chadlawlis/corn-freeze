@@ -1,6 +1,6 @@
 body {
   color: #333;
-  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font: 14px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -16,9 +16,21 @@ html, body, #map {
   margin: 0 0 40px 10px;
 }
 
+.date-button {
+  font-size: 12px;
+}
+
+.date-button:first-child {
+  margin-right: 5px;
+}
+
 .date-picker-input,
 .form-label {
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+}
+
+.form-label {
+  font-size: 16px;
 }
 
 .form-menu {
@@ -26,7 +38,11 @@ html, body, #map {
 }
 
 .form-menu:first-child {
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.form-menu:last-child {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 input[type="checkbox"],
@@ -36,11 +52,10 @@ input[type="radio"] {
 
 input[type="date"] {
   color: #333;
-  font: 16px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font: 14px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .layers-toggle {
-  font-size: .875rem;
   right: 10px;
   top: 160px;
 }
@@ -60,7 +75,7 @@ input[type="date"] {
 
 .legend-block {
   line-height: 16px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .legend-block i {
@@ -74,12 +89,8 @@ input[type="date"] {
   background: linear-gradient(90deg, #5c53a5, #a059a0, #ce6693, #eb7f86, #f8a07e, #fac484, #f3e79b);
   border-radius: 6px;
   height: 10px;
-  margin: 5px 0 10px;
+  margin: 4px 0 8px;
   width: 100%;
-}
-
-.legend-gradient-label {
-  margin-top: 10px;
 }
 
 .map-overlay {
@@ -92,13 +103,25 @@ input[type="date"] {
 .mapboxgl-popup-content {
   background: #333;
   color: #efefef;
-  font: 1.4em -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font: 16px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
   padding: 0;
   text-align: center;
 }
 
 .mapboxgl-popup-content p {
-  margin: 5px 0 0;
+  margin: 8px 0 0;
+}
+
+.mapboxgl-popup-content .popup-menu p:first-child {
+  margin: 0;
+}
+
+.mapboxgl-popup-content .popup-menu {
+  padding: 10px;
+}
+
+.mapboxgl-popup-content hr {
+  margin: 0;
 }
 
 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
@@ -118,20 +141,8 @@ input[type="date"] {
     border-left-color: #333;
 }
 
-.popup-menu {
-  padding: 10px;
-}
-
-.popup-menu:first-child {
-  border-bottom: 2px solid #efefef;
-}
-
-.popup-menu:last-child {
-  padding-top: 5px;
-}
-
 .small {
-  font-size: small;
+  font-size: 12px;
 }
 
 .toggle label {
