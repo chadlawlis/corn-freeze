@@ -68,7 +68,10 @@ import { Spinner } from './spin.js';
     customAttribution: '<a href="https://chadlawlis.com">Chad Lawlis</a>'
   });
 
-  var usBounds = [[-131.497070, 22.093303], [-62.502929, 52.661410]];
+  // [[sw],[ne]]
+  // var usBounds = [[-131.5, 22.1], [-62.5, 52.6]];
+  // moved the view slightly west (i.e., moved US slightly east on the map) to accommodate form-menu on 13" laptop
+  var usBounds = [[-134, 22.1], [-65, 52.6]];
   map.fitBounds(usBounds);
 
   // Declare baseLayers for map style switcher
