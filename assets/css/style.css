@@ -200,8 +200,8 @@ input[type="date"] {
 
 /* Lightbox content */
 .lightbox figcaption {
-  background: #efefef;
-  max-width: 600px;
+  background: #fff;
+  max-width: 800px;
   overflow: auto;
   position: relative;
   padding: 15px;
