@@ -106,7 +106,7 @@ import { Spinner } from './spin.js';
     map.addControl(new mapboxgl.NavigationControl({ showCompass: false }));
 
     // Add fullscreen control
-    map.addControl(new mapboxgl.FullscreenControl());
+    // map.addControl(new mapboxgl.FullscreenControl());
 
     // Create custom "zoom to US" control class
     // https://docs.mapbox.com/mapbox-gl-js/api/#icontrol
