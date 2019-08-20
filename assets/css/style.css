@@ -246,7 +246,6 @@ input[type="date"] {
   height: 30px;
   position: absolute;
   display: flex;
-  z-index: 11; /* position above .lightbox figcaption */
   align-items: center;
   justify-content: center;
   background: #e3e3e3;
@@ -254,6 +253,7 @@ input[type="date"] {
   content: "×";
   cursor: pointer;
   font-size: large;
+  z-index: 11; /* position above mapbox-ctrl elements + .lightbox figcaption */
 }
 
 /* Lightbox overlay */
@@ -266,4 +266,5 @@ input[type="date"] {
   background: rgba(51, 51, 51, 0.8);
   content: "";
   cursor: default;
+  z-index: 9; /* position above mapbox-ctrl elements, below .lightbox figcaption */
 }
