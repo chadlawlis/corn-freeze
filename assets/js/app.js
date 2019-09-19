@@ -1,5 +1,4 @@
-/* global mapboxgl */
-/* global $ */
+/* global $, mapboxgl */
 
 import { Spinner } from './spin.js';
 
