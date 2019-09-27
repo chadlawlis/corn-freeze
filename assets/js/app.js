@@ -67,7 +67,7 @@ import { Spinner } from './spin.js';
   var map = new mapboxgl.Map({
     container: 'map',
     hash: true,
-    style: 'mapbox://styles/mapbox/light-v10', // mapbox://styles/mapbox/satellite-streets-v11
+    style: 'mapbox://styles/mapbox/light-v10',
     customAttribution: '<a href="https://chadlawlis.com">Chad Lawlis</a>'
   });
 
@@ -107,7 +107,7 @@ import { Spinner } from './spin.js';
     // Add fullscreen control
     // map.addControl(new mapboxgl.FullscreenControl());
 
-    // Create custom "zoom to US" control class
+    // Create custom "zoom to US" control and implement as ES6 class
     // https://docs.mapbox.com/mapbox-gl-js/api/#icontrol
     class ZoomUsControl {
       onAdd (map) {
@@ -118,6 +118,7 @@ import { Spinner } from './spin.js';
         this._container.appendChild(document.createElement('button'));
         return this._container;
       }
+
       onRemove () {
         this._container.parentNode.removeChild(this._container);
         this._map = undefined;
