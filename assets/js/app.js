@@ -543,18 +543,18 @@ import { Spinner } from './spin.js';
     }
 
     map.addSource('counties', {
-      'type': 'geojson',
-      'data': data
+      type: 'geojson',
+      data: data
     });
 
     map.addLayer({
-      'id': 'counties',
-      'type': 'fill',
-      'source': 'counties',
-      'layout': {
-        'visibility': visibility
+      id: 'counties',
+      type: 'fill',
+      source: 'counties',
+      layout: {
+        visibility: visibility
       },
-      'paint': {
+      paint: {
         'fill-color': [
           'step',
           ['to-number', ['get', fDoy]],
@@ -573,13 +573,13 @@ import { Spinner } from './spin.js';
     }, firstLandUseId);
 
     map.addLayer({
-      'id': 'counties-line',
-      'type': 'line',
-      'source': 'counties',
-      'layout': {
-        'visibility': visibility
+      id: 'counties-line',
+      type: 'line',
+      source: 'counties',
+      layout: {
+        visibility: visibility
       },
-      'paint': {
+      paint: {
         'line-color': '#fff',
         'line-width': [
           'interpolate',
