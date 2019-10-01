@@ -28,7 +28,7 @@ import { Spinner } from './spin.js';
   var spinner = new Spinner(opts);
 
   var mapLayers;
-  var firstLandUseId;
+  var firstLabelLayer;
   var visibility = 'visible';
 
   // Declare freeze layer values for radio buttons
@@ -537,7 +537,7 @@ import { Spinner } from './spin.js';
     // Find the index of the settlement-label layer in the loaded map style, to place counties layer below
     for (let i = 0; i < mapLayers.length; i++) {
       if (mapLayers[i].id === 'settlement-label') {
-        firstLandUseId = mapLayers[i].id;
+        firstLabelLayer = mapLayers[i].id;
         break;
       }
     }
@@ -570,7 +570,7 @@ import { Spinner } from './spin.js';
         ],
         'fill-opacity': 1
       }
-    }, firstLandUseId);
+    }, firstLabelLayer);
 
     map.addLayer({
       id: 'counties-line',
@@ -592,7 +592,7 @@ import { Spinner } from './spin.js';
           // in between, line-width will be linearly interpolated between 0.5 and 1.2 pixels
         ]
       }
-    }, firstLandUseId);
+    }, firstLabelLayer);
 
     // Add popup for each layer
     // Change cursor to pointer on parcel layer mouseover
