@@ -1,13 +1,13 @@
+html, body, #map {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   color: #333;
   font: 14px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
-}
-
-html, body, #map {
-  height: 100%;
-  width: 100%;
 }
 
 .bottom-left {
