@@ -135,7 +135,6 @@ import { Spinner } from './spin.js';
     var usaButton = usaControl.firstElementChild;
     usaButton.id = 'usa';
     usaButton.title = 'Zoom to US';
-    usaButton.innerHTML = '<img width="22" height="22" src="assets/img/usa.svg">';
     usaButton.addEventListener('click', function () {
       map.fitBounds(usBounds, {
         linear: true

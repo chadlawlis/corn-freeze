@@ -268,3 +268,10 @@ input[type="date"] {
   cursor: default;
   z-index: 9; /* position above mapbox-ctrl elements, below .lightbox figcaption */
 }
+
+.usa-control {
+  background-image: url(../img/usa.svg);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 22px 22px;
+}
