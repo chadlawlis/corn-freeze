@@ -150,11 +150,6 @@ import { Spinner } from './spin.js';
     layersImage.id = 'layers-image';
     layersImage.className = 'layers-image';
     var layersImageAnchor = document.createElement('a');
-    var layersImageIcon = document.createElement('img');
-    layersImageIcon.src = 'assets/img/layers.png';
-    layersImageIcon.className = 'layers-icon';
-    layersImageIcon.alt = 'layers icon';
-    layersImageAnchor.appendChild(layersImageIcon);
     layersImage.appendChild(layersImageAnchor);
     layersToggle.appendChild(layersImage);
 

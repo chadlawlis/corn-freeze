@@ -74,11 +74,11 @@ input[type="date"] {
   top: 120px;
 }
 
-.layers-icon {
-  padding: 2px;
-}
-
 .layers-image {
+  background-image: url(../img/layers-2x.png);
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 22px 22px;
   height: 30px;
   width: 30px;
 }
