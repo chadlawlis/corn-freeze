@@ -95,6 +95,16 @@ import { Spinner } from './spin.js';
 
   // Trigger mapData() on map style load (ensures data persists when map style changed)
   map.on('style.load', function () {
+    mapLayers = map.getStyle().layers;
+
+    // Find the index of the settlement-label layer in the loaded map style, to place counties layer below
+    for (let i = 0; i < mapLayers.length; i++) {
+      if (mapLayers[i].id === 'settlement-label') {
+        firstLabelLayer = mapLayers[i].id;
+        break;
+      }
+    }
+
     if (data) {
       mapData(data);
     }
@@ -529,16 +539,6 @@ import { Spinner } from './spin.js';
       map.removeSource('counties');
     }
 
-    mapLayers = map.getStyle().layers;
-
-    // Find the index of the settlement-label layer in the loaded map style, to place counties layer below
-    for (let i = 0; i < mapLayers.length; i++) {
-      if (mapLayers[i].id === 'settlement-label') {
-        firstLabelLayer = mapLayers[i].id;
-        break;
-      }
-    }
-
     map.addSource('counties', {
       type: 'geojson',
       data: data
@@ -567,7 +567,7 @@ import { Spinner } from './spin.js';
         ],
         'fill-opacity': 1
       }
-    }, firstLabelLayer);
+    }, firstLabelLayer); // firstLabelLayer set on "map.on('style.load')"
 
     map.addLayer({
       id: 'counties-line',
@@ -589,7 +589,7 @@ import { Spinner } from './spin.js';
           // in between, line-width will be linearly interpolated between 0.5 and 1.2 pixels
         ]
       }
-    }, firstLabelLayer);
+    }, firstLabelLayer); // firstLabelLayer set on "map.on('style.load')"
 
     // Add popup for each layer
     // Change cursor to pointer on parcel layer mouseover
