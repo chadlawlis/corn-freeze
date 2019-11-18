@@ -51,12 +51,12 @@ body {
   color: #333;
 }
 
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
   vertical-align: middle;
 }
 
-input[type="date"] {
+input[type='date'] {
   color: #333;
   font: 14px -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
@@ -252,7 +252,7 @@ input[type="date"] {
   justify-content: center;
   background: #e3e3e3;
   color: #333;
-  content: "×";
+  content: '×';
   cursor: pointer;
   font-size: large;
   z-index: 11; /* position above mapbox-ctrl elements + .lightbox figcaption */
@@ -266,7 +266,7 @@ input[type="date"] {
   height: 100%;
   position: fixed;
   background: rgba(51, 51, 51, 0.8);
-  content: "";
+  content: '';
   cursor: default;
   z-index: 9; /* position above mapbox-ctrl elements, below .lightbox figcaption */
 }
